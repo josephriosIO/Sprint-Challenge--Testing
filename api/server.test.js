@@ -28,6 +28,39 @@ describe("Server.js", () => {
         expect(res.body).toHaveLength(0);
       });
     });
-    describe("POST ENDPOINT", () => {});
+    describe("POST ENDPOINT", () => {
+      it("should return 201 status code", async () => {
+        const game = {
+          title: "Pac-Man",
+          genre: "Arcade",
+          releaseYear: 1980
+        };
+        const res = await request(server)
+          .post("/api/games")
+          .send(game);
+        expect(res.status).toBe(201);
+      });
+      it("should return an object with posted game", async () => {
+        const game = {
+          title: "Pac-Man",
+          genre: "Arcade",
+          releaseYear: 1980
+        };
+        const res = await request(server)
+          .post("/api/games")
+          .send(game);
+        expect(res.body.title).toBe("Pac-Man");
+      });
+      it("should return 422 status code if a field is missing", async () => {
+        const game = {
+          title: "Pac-Man",
+          releaseYear: 1980
+        };
+        const res = await request(server)
+          .post("/api/games")
+          .send(game);
+        expect(res.status).toBe(422);
+      });
+    });
   });
 });
