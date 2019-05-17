@@ -18,10 +18,18 @@ router.post("/", async (req, res) => {
         .status(422)
         .json({ messsage: "missing a field please enter all required fields" });
     }
+
+    if (title === null) {
+      return res.status(405).json({ message: "title exists" });
+    }
+
     const postedGame = await db.insert(req.body);
     res.status(201).json(postedGame);
   } catch (err) {
-    res.status(500).json({ messaage: err.message });
+    if (req.body) {
+      return res.status(405).json({ message: "title exists" });
+    }
+    res.status(500).json({ message: err.message });
   }
 });
 

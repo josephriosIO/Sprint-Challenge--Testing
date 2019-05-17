@@ -2,7 +2,8 @@ const db = require("../dbConfig.js");
 
 module.exports = {
   get,
-  insert
+  insert,
+  ifExists
 };
 
 async function insert(game) {
@@ -18,4 +19,12 @@ function findById(id) {
   return db("games")
     .where({ id })
     .first();
+}
+
+function ifExists(id) {
+  return db("games").whereExists(function() {
+    this.select("*")
+      .from("games")
+      .whereRaw(`games.id = ${id}`);
+  });
 }

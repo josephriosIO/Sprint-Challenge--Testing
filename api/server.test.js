@@ -61,6 +61,21 @@ describe("Server.js", () => {
           .send(game);
         expect(res.status).toBe(422);
       });
+      it("should return status 405 if same game is made", async () => {
+        const game = {
+          title: "Pac-Man",
+          genre: "Arcade",
+          releaseYear: 1980
+        };
+        let res = await request(server)
+          .post("/api/games")
+          .send(game);
+        expect(res.status).toBe(201);
+        res = await request(server)
+          .post("/api/games")
+          .send(game);
+        expect(res.status).toBe(405);
+      });
     });
   });
 });
